@@ -1,37 +1,21 @@
-var express = require('express');
+﻿var express = require('express');
 var router = express.Router();
+const PgExecute = require('../models/PgConnection/PgExecute');
 
 router.post('/deletar/:id', (req, res, next) => {
-
-    const { Client } = require('pg');
-
-    const client = new Client({
-        user: 'user',
-        host: 'host',
-        database: 'database',
-        password: 'password',
-        port: 5432,
-    });
-
-    const query = {
-        text: 'delete from pessoa where id = $1;',
-        values: [req.params.id]
-    };
-
-    client.connect();
-    
-    client.query(query, (err, resp) => {
-        if (err)
-        {
-            res.send('Erro no banco de dados: ' + err.stack);
+    PgExecute('delete from pessoa where id = $1;',
+        [req.params.id],
+        (err, result) => {
+            if (err)
+            {
+                res.send('Erro no banco de dados: ' + err.stack);
+            }
+            else 
+            {
+                res.redirect('/');
+            }
         }
-        else 
-        {
-            res.redirect('/');
-        }
-
-        client.end();
-    });
+    );
 });
 
 router.get('/criar', (req, res, next) => {
@@ -42,7 +26,6 @@ router.post('/criar', function(req, res, next) {
     
     let nome = req.body.nome;
     let nascimento = req.body.nascimento;
-
     let erros = [];
 
     if(nome == null || nome == '')
@@ -61,25 +44,9 @@ router.post('/criar', function(req, res, next) {
     }
     else 
     {
-        const { Client } = require('pg');
-
-        const client = new Client({
-            user: 'user',
-            host: 'host',
-            database: 'database',
-            password: 'password',
-            port: 5432,
-        });
-
-        const query = {
-            text: 'insert into pessoa (nome, nascimento) values ($1, $2);',
-            values: [nome, nascimento]
-        };
-
-        client.connect();
-
-        client.query('set client_encoding to LATIN1;', (err, resp) => {
-            client.query(query, (err, resp) => {
+        PgExecute('insert into pessoa (nome, nascimento) values ($1, $2);',
+            [nome, nascimento],
+            (err, result) => {
                 if (err)
                 {
                     res.send('Erro no banco de dados: ' + err.stack);
@@ -88,10 +55,8 @@ router.post('/criar', function(req, res, next) {
                 {
                     res.redirect('/');
                 }
-        
-                client.end();
-            })
-        });
+            }
+        )
     }
 });
 
