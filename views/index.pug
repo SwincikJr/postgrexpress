@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  
+  if lista.length > 0
+
+    p Here is some names from a PostgreSQL database:
+    
+    table
+      thead
+        tr
+          td(style='font-weight:bold; border:1px solid gray; padding:5px; text-align: center') Nome
+          td(style='font-weight:bold; border:1px solid gray; padding:5px; text-align: center') Nascimento
+          td(style='font-weight:bold; border:1px solid gray; padding:5px; text-align: center') 
+      tbody
+        each pessoa in lista
+          tr
+            td(style='border:1px solid gray; padding:5px; text-align: center')
+              a(href='/objetos/' + pessoa.id) #{pessoa.nome}
+            td(style='border:1px solid gray; padding:5px; text-align: center') #{pessoa.nascimento.getDate() + '/' + (pessoa.nascimento.getMonth() + 1) + '/' + pessoa.nascimento.getFullYear()}
+            td(style='border:1px solid gray; padding:5px; text-align: center')
+              form(method='post', action='pessoas/deletar/' + pessoa.id)
+                button(type='submit') Excluir
+  
+  else
+    p Nenhum nome cadastrado...
+
+  p
+    a(href='pessoas/criar') Novo Nome

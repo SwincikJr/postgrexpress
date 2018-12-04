@@ -1,0 +1,23 @@
+extends layout
+
+block content
+
+    h2 Novo Nome
+
+    if erros.length > 0
+        ul
+            for erro in erros
+                li #{erro}
+
+    form(method='post', action='/pessoas/criar')
+        div
+            label(for='nome_input') Nome
+            input(type='text', name='nome', id='nome_input', style='margin:10px', value=pessoa.nome)
+        
+        div
+            label(for='nascimento_input') Data de Nascimento
+            input(type='date', name='nascimento', id='nascimento_input', style='margin:10px', value=pessoa.nascimento)
+        
+        div
+            a(href='/', style='margin:10px') Cancelar
+            button(type='submit') Criar

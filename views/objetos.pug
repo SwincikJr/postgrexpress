@@ -1,0 +1,31 @@
+extends layout
+
+block content
+
+    if objetos.length == 1 && objetos[0].nome_objeto == null
+        h2 Nenhum objeto encontrado para #{objetos[0].nome_pessoa}.
+
+    else
+
+        h2 Objetos encontrados para #{objetos[0].nome_pessoa}:
+
+        table(style='margin:10px;')
+            thead
+                tr
+                    td(style='font-weight:bold; border:1px solid gray; padding:5px; text-align: center') Nome
+                    td(style='font-weight:bold; border:1px solid gray; padding:5px; text-align: center')
+            tbody
+                each objeto in objetos
+                    tr
+                        td(style='border:1px solid gray; padding:5px; text-align: center') #{objeto.nome_objeto}
+                        td(style='border:1px solid gray; padding:5px; text-align: center')
+                            form(method='post' action='/objetos/deletar/' + objeto.objeto_id)
+                                input(type='hidden', name='pessoa_id', value = objeto.pessoa_id)
+                                button(type='submit') Deletar
+
+    div
+        a(href='/objetos/criar/' + objetos[0].pessoa_id) Novo Objeto
+
+        p
+            a(href='/') Home
+

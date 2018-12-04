@@ -1,0 +1,21 @@
+extends layout
+
+block content
+    h2 Novo Objeto
+
+    if erros.length > 0
+        ul 
+            each erro in erros
+                li #{erro}
+
+    form(method='post', action='/objetos/criar')
+
+        input(type='hidden', name='pessoa_id', value=pessoa_id)
+
+        div
+            label(for='input_nome') Nome
+            input(type='text', name='nome', id='input_nome', style='margin:10px')
+
+        div
+            a(href='/objetos/' + pessoa_id, style='margin:10px') Cancelar
+            button(type='submit') Criar
